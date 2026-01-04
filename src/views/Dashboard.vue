@@ -116,7 +116,8 @@ const categories = ref([
   { id: 2, name: '背景', fileCount: 28, color: '#4CAF50' },
   { id: 3, name: '技术', fileCount: 8, color: '#FF9800' },
   { id: 4, name: '操作手册', fileCount: 12, color: '#9C27B0' },
-  { id: 5, name: '压缩包', fileCount: 5, color: '#F44336' }
+  { id: 5, name: '压缩包', fileCount: 5, color: '#F44336' },
+  { id: 6, name: '音视频文件', fileCount: 5, color: '#5FF556' }
 ])
 
 // 模拟数据：文件列表
@@ -596,6 +597,7 @@ watch(pieChartData, (newData) => {
   padding: 20px;
   background-color: var(--light-bg);
   border-right: 1px solid var(--light-border);
+  height: 450px; /* 设置固定高度，确保饼图高度不变 */
 }
 
 /* 饼图组件 */
