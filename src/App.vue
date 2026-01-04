@@ -115,8 +115,8 @@ html, body {
   transform: translateY(-50%);
   z-index: 1000;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  flex-direction: row;
+  align-items: center;
 }
 
 /* 导航按钮 */
@@ -181,7 +181,7 @@ html, body {
 
 /* 导航菜单 */
 .nav-menu {
-  margin-top: 10px;
+  margin-left: 10px;
   background-color: var(--light-primary);
   border: 1px solid var(--light-border);
   border-radius: 12px;
