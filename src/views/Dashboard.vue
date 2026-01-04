@@ -22,14 +22,37 @@
               ref="barChartRef"
               class="bar-chart"
             ></div>
+            
             <!-- 文件列表（根据当前hover的分类显示） -->
             <div class="file-list">
+              <!-- 搜索框 -->
+              <div class="search-container">
+                <input 
+                  type="text" 
+                  v-model="searchKeyword" 
+                  placeholder="搜索文件..."
+                  class="search-input"
+                />
+              </div>
+              
               <div 
                 v-for="file in activeFiles" 
                 :key="file.id"
                 class="file-item"
               >
-                {{ file.name }}
+                <!-- 文件信息 -->
+                <div class="file-info">
+                  <div class="file-name">{{ file.name }}</div>
+                  <div class="file-meta">
+                    <span class="file-size">{{ file.size }}</span>
+                    <span class="file-date">{{ file.modified }}</span>
+                  </div>
+                </div>
+                
+                <!-- 文件操作 -->
+                <div class="file-actions">
+                  <span class="action-icon">⋮</span>
+                </div>
               </div>
             </div>
           </div>
@@ -68,42 +91,55 @@ const categories = ref([
 // 模拟数据：文件列表
 const filesData = {
   1: [
-    { id: 1, name: '项目计划.docx' },
-    { id: 2, name: '需求文档.pdf' },
-    { id: 3, name: '设计方案.pptx' },
-    { id: 4, name: '会议记录.txt' },
-    { id: 5, name: '技术文档.md' }
+    { id: 1, name: '项目计划.docx', type: 'document', size: '2.3 MB', modified: '2024-01-15 14:30' },
+    { id: 2, name: '需求文档.pdf', type: 'pdf', size: '5.6 MB', modified: '2024-01-16 09:15' },
+    { id: 3, name: '设计方案.pptx', type: 'presentation', size: '12.8 MB', modified: '2024-01-17 16:45' },
+    { id: 4, name: '会议记录.txt', type: 'text', size: '15 KB', modified: '2024-01-18 11:20' },
+    { id: 5, name: '技术文档.md', type: 'markdown', size: '23 KB', modified: '2024-01-19 10:05' },
+    { id: 6, name: '技术文档.md', type: 'markdown', size: '23 KB', modified: '2024-01-19 10:05' },
+    { id: 7, name: '技术文档.md', type: 'markdown', size: '23 KB', modified: '2024-01-19 10:05' }
   ],
   2: [
-    { id: 6, name: '产品截图.jpg' },
-    { id: 7, name: '设计草图.png' },
-    { id: 8, name: '界面原型.svg' }
+    { id: 6, name: '产品截图.jpg', type: 'image', size: '1.2 MB', modified: '2024-01-20 15:30' },
+    { id: 7, name: '设计草图.png', type: 'image', size: '850 KB', modified: '2024-01-21 08:45' },
+    { id: 8, name: '界面原型.svg', type: 'vector', size: '45 KB', modified: '2024-01-22 14:20' }
   ],
   3: [
-    { id: 9, name: '产品演示.mp4' },
-    { id: 10, name: '培训视频.avi' }
+    { id: 9, name: '产品演示.mp4', type: 'video', size: '120 MB', modified: '2024-01-23 11:10' },
+    { id: 10, name: '培训视频.avi', type: 'video', size: '85 MB', modified: '2024-01-24 16:50' }
   ],
   4: [
-    { id: 11, name: '背景音乐.mp3' },
-    { id: 12, name: '音效.wav' }
+    { id: 11, name: '背景音乐.mp3', type: 'audio', size: '4.5 MB', modified: '2024-01-25 09:30' },
+    { id: 12, name: '音效.wav', type: 'audio', size: '2.8 MB', modified: '2024-01-26 14:45' }
   ],
   5: [
-    { id: 13, name: '项目源码.zip' },
-    { id: 14, name: '数据备份.rar' }
+    { id: 13, name: '项目源码.zip', type: 'archive', size: '45 MB', modified: '2024-01-27 10:20' },
+    { id: 14, name: '数据备份.rar', type: 'archive', size: '38 MB', modified: '2024-01-28 16:15' }
   ]
 }
 
 // 当前激活的分类
 const activeCategory = ref(1)
 
+// 搜索关键词
+const searchKeyword = ref('')
+
 // 设置激活的分类
 const setActiveCategory = (categoryId) => {
   activeCategory.value = categoryId
 }
 
-// 根据激活的分类获取对应的文件列表
+// 根据激活的分类获取对应的文件列表，并支持搜索过滤
 const activeFiles = computed(() => {
-  return filesData[activeCategory.value] || []
+  const files = filesData[activeCategory.value] || []
+  if (!searchKeyword.value) {
+    return files
+  }
+  
+  const keyword = searchKeyword.value.toLowerCase()
+  return files.filter(file => {
+    return file.name.toLowerCase().includes(keyword)
+  })
 })
 
 // 饼图数据
@@ -461,29 +497,116 @@ watch(pieChartData, (newData) => {
   min-height: 250px;
 }
 
+/* 搜索框容器 */
+.search-container {
+  padding: 16px;
+  background-color: var(--light-bg);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* 搜索输入框 */
+.search-input {
+  width: 100%;
+  padding: 10px 16px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 24px;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.search-input:focus {
+  border-color: #4285F4;
+  box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+}
+
 /* 文件列表 */
 .file-list {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 4px 0;
+  gap: 0;
+  padding: 0;
+  background-color: var(--light-bg);
+  max-height: 400px; /* 设置最大高度，超出时滚动 */
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: 8px;
 }
 
 /* 文件项 */
 .file-item {
-  padding: 10px 18px;
-  border-radius: 6px;
-  background-color: var(--light-bg);
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  gap: 16px;
+  background-color: transparent;
   color: var(--light-text);
   font-size: 14px;
-  border: 1px solid transparent;
-  transition: all 0.2s ease;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+/* 最后一个文件项移除底部边框 */
+.file-item:last-child {
+  border-bottom: none;
 }
 
 .file-item:hover {
-  background-color: var(--light-primary);
-  border-color: var(--light-border);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+  background-color: rgba(0, 0, 0, 0.05);
+  box-shadow: none;
+}
+
+/* 文件信息 */
+.file-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.file-name {
+  font-weight: 500;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.87);
+  margin-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-meta {
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.file-size {
+  white-space: nowrap;
+}
+
+.file-date {
+  white-space: nowrap;
+}
+
+/* 文件操作 */
+.file-actions {
+  flex-shrink: 0;
+}
+
+.action-icon {
+  font-size: 20px;
+  color: rgba(0, 0, 0, 0.54);
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.action-icon:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.87);
 }
 </style>
