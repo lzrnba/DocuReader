@@ -61,7 +61,36 @@
       
       <!-- 第二个空的功能框 -->
       <div class="feature-card empty-card">
-        <!-- 空卡片占位符 -->
+        <!-- 水平排列的两个卡片 -->
+        <div class="subcards-container">
+          <!-- 第一个子卡片 -->
+          <div class="subcard">
+            <div class="subcard-header">
+              <h3>文档总量</h3>
+            </div>
+            <div class="subcard-content">
+              <div class="doc-total-display">
+                <v-icon size="64" color="#FF6B6B" class="doc-icon">mdi-file-document-multiple</v-icon>
+                <div class="doc-number">{{ totalDocs }}</div>
+                <div class="doc-label">文档总量</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 第二个子卡片 -->
+          <div class="subcard">
+            <div class="subcard-header">
+              <h3>分类数量</h3>
+            </div>
+            <div class="subcard-content">
+              <div class="doc-total-display">
+                <v-icon size="64" color="#FF6B6B" class="doc-icon">mdi-folder-multiple</v-icon>
+                <div class="doc-number">{{ totalCategories }}</div>
+                <div class="doc-label">分类数量</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -78,6 +107,8 @@ let pieChartInstance = null
 // 条形图引用
 const barChartRef = ref(null)
 let barChartInstance = null
+
+
 
 // 模拟数据：文件夹分类
 const categories = ref([
@@ -313,8 +344,9 @@ const handlePieChartHover = (params) => {
 
 // 处理条形图hover事件
 const handleBarChartHover = (params) => {
-  if (params && params.data) {
-    const category = categories.value.find(cat => cat.name === params.data.name)
+  if (params && params.dataIndex !== undefined) {
+    // 使用dataIndex获取分类，这种方式更可靠
+    const category = categories.value[params.dataIndex]
     if (category) {
       activeCategory.value = category.id
     }
@@ -335,6 +367,21 @@ const handlePieChartMouseOut = () => {
     })
   }
 }
+
+// 计算文档总量
+const totalDocs = computed(() => {
+  let count = 0
+  // 遍历所有分类，计算文件总数
+  Object.values(filesData).forEach(files => {
+    count += files.length
+  })
+  return count
+})
+
+// 计算分类数量
+const totalCategories = computed(() => {
+  return categories.value.length
+})
 
 // 初始化饼图和条形图
 onMounted(() => {
@@ -382,6 +429,9 @@ onMounted(() => {
       }
     })
   }
+  
+
+
 })
 
 // 监听饼图数据变化，更新饼图和条形图
@@ -458,6 +508,83 @@ watch(pieChartData, (newData) => {
   justify-content: center;
   align-items: center;
   width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* 子卡片容器 */
+.subcards-container {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  height: 100%;
+}
+
+/* 子卡片样式 */
+.subcard {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.subcard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* 子卡片头部 */
+.subcard-header {
+  padding: 16px;
+  background-color: #fff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.subcard-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--light-text);
+}
+
+/* 子卡片内容 */
+.subcard-content {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--light-text);
+  font-size: 14px;
+}
+
+/* 文档总量数字卡片样式 */
+.doc-total-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  text-align: center;
+}
+
+.doc-icon {
+  margin-bottom: 12px;
+}
+
+.doc-number {
+  font-size: 48px;
+  font-weight: bold;
+  color: #FF6B6B;
+  margin-bottom: 4px;
+}
+
+.doc-label {
+  font-size: 16px;
+  color: #666;
 }
 
 /* 左侧分组器 */
