@@ -83,14 +83,14 @@ const navigateTo = (routePath) => {
 </template>
 
 <style>
-/* Obsidian 默认主题颜色 */
+/* 浅色简约黑白主题颜色 */
 :root {
-  --obsidian-bg: #1e1e1e;
-  --obsidian-primary: #2d2d2d;
-  --obsidian-text: #cccccc;
-  --obsidian-accent: #007acc;
-  --obsidian-border: #3e3e42;
-  --obsidian-hover: #3a3a3a;
+  --light-bg: #ffffff;
+  --light-primary: #f5f5f5;
+  --light-text: #333333;
+  --light-accent: #000000;
+  --light-border: #e0e0e0;
+  --light-hover: #e9e9e9;
 }
 
 /* 全局样式 */
@@ -98,20 +98,21 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  background-color: var(--obsidian-bg);
-  color: var(--obsidian-text);
+  background-color: var(--light-bg);
+  color: var(--light-text);
 }
 
 .obsidian-theme {
-  background-color: var(--obsidian-bg);
-  color: var(--obsidian-text);
+  background-color: var(--light-bg);
+  color: var(--light-text);
 }
 
 /* 导航按钮容器 */
 .nav-button-container {
   position: fixed;
-  top: 20px;
+  top: 50%;
   left: 20px;
+  transform: translateY(-50%);
   z-index: 1000;
   display: flex;
   flex-direction: column;
@@ -123,25 +124,25 @@ html, body {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background-color: var(--obsidian-primary);
-  border: 2px solid var(--obsidian-border);
+  background-color: var(--light-primary);
+  border: 2px solid var(--light-border);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .nav-button:hover {
-  background-color: var(--obsidian-hover);
+  background-color: var(--light-hover);
   transform: scale(1.05);
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
 }
 
 .nav-button.active {
-  background-color: var(--obsidian-accent);
-  border-color: var(--obsidian-accent);
+  background-color: var(--light-accent);
+  border-color: var(--light-accent);
 }
 
 /* 汉堡菜单图标 */
@@ -157,9 +158,13 @@ html, body {
 .hamburger span {
   width: 100%;
   height: 2px;
-  background-color: var(--obsidian-text);
+  background-color: var(--light-text);
   border-radius: 2px;
   transition: all 0.3s ease;
+}
+
+.nav-button.active .hamburger span {
+  background-color: white;
 }
 
 .nav-button.active .hamburger span:nth-child(1) {
@@ -177,11 +182,11 @@ html, body {
 /* 导航菜单 */
 .nav-menu {
   margin-top: 10px;
-  background-color: var(--obsidian-primary);
-  border: 1px solid var(--obsidian-border);
+  background-color: var(--light-primary);
+  border: 1px solid var(--light-border);
   border-radius: 12px;
   padding: 10px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   opacity: 0;
   visibility: hidden;
   transform: translateX(-20px);
@@ -209,16 +214,16 @@ html, body {
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: var(--obsidian-text);
+  color: var(--light-text);
   position: relative;
 }
 
 .menu-item:hover {
-  background-color: var(--obsidian-hover);
+  background-color: var(--light-hover);
 }
 
 .menu-item.active {
-  background-color: var(--obsidian-accent);
+  background-color: var(--light-accent);
   color: white;
 }
 
@@ -233,7 +238,7 @@ html, body {
   content: "";
   width: 16px;
   height: 16px;
-  border: 2px solid var(--obsidian-text);
+  border: 2px solid var(--light-text);
   border-radius: 50%;
   margin-right: 12px;
   transition: all 0.2s ease;

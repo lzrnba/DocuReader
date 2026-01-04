@@ -19,22 +19,22 @@
 }
 
 .obsidian-card {
-  background-color: var(--obsidian-primary);
-  border: 1px solid var(--obsidian-border);
+  background-color: var(--light-primary);
+  border: 1px solid var(--light-border);
   border-radius: 8px;
   padding: 24px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .obsidian-title {
-  color: var(--obsidian-text);
+  color: var(--light-text);
   font-size: 24px;
   margin-bottom: 16px;
   font-weight: 600;
 }
 
 .obsidian-content {
-  color: var(--obsidian-text);
+  color: var(--light-text);
 }
 
 .obsidian-content p {
